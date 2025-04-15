@@ -1,0 +1,61 @@
+.Container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    position: relative;
+}
+
+.Logo {
+    width: 200px;
+    height: 50px;
+    background-color: aquamarine;
+}
+
+.List {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    list-style: none;
+    left: 30%;
+    transform: translateX(-30%);
+}
+
+.ListItem {
+    text-decoration: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    font-size: 18px;
+}
+
+.Cart {
+    width: 50px;
+    height: 50px;
+    background-color: deeppink;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .List {
+        display: none; /* Скрываем меню на мобильных (можно заменить на бургер) */
+    }
+
+    .Logo {
+        width: 150px;
+    }
+
+    .Cart {
+        width: 40px;
+        height: 40px;
+    }
+}

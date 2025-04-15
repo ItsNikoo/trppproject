@@ -18,6 +18,7 @@ class Item(models.Model):
         on_delete=models.CASCADE,
         related_name='items'
     )
+    hit = models.BooleanField(default=False)
     available = models.BooleanField(default=False)
     preorder = models.BooleanField(default=True)
     amount = models.IntegerField()

@@ -1,0 +1,9 @@
+.MainContainer{
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 200px;
+    background-color: pink;
+    margin-top: 10px;
+    justify-content: center;
+}
