@@ -1,0 +1,10 @@
+.CardsContainer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+.MainContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
