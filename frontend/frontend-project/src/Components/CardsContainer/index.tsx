@@ -1,4 +1,5 @@
 import ItemCard from "../ItemCard";
+<<<<<<< HEAD
 import styles from "./CardsContainer.module.css";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -56,4 +57,23 @@ export default function CardsContainer() {
             </div>
         </div>
     );
+=======
+import styles from "./CardsContainer.module.css"
+
+export default function CardsContainer() {
+    return (
+        <div className={styles.MainContainer}>
+            <div className={styles.CardsContainer}>
+                <ItemCard/>
+                <ItemCard/>
+                <ItemCard/>
+                <ItemCard/>
+                <ItemCard/>
+                <ItemCard/>
+                <ItemCard/>
+                <ItemCard/>
+            </div>
+        </div>
+    )
+>>>>>>> b63f5ce7b48603637a510e2e78b66d25a3954c60
 }

@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@splidejs/splide": "^4.1.4",
+<<<<<<< HEAD
     "@tanstack/react-query": "^5.74.4",
     "axios": "^1.8.4",
+=======
+>>>>>>> b63f5ce7b48603637a510e2e78b66d25a3954c60
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-slick": "^0.30.3"

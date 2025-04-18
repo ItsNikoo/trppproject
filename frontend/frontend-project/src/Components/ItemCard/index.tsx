@@ -1,5 +1,6 @@
 import styles from "./ItemCard.module.css"
 
+<<<<<<< HEAD
 
 interface Photo {
     id: number;
@@ -29,5 +30,14 @@ export default function ItemCard({title, price, available, preorder, photos}: It
                 <p>{available}</p>
             </div>
         </a>
+=======
+export default function ItemCard() {
+    return (
+        <div className={styles.MainContainer}>
+            <div className={styles.PhotoContainer}>
+
+            </div>
+        </div>
+>>>>>>> b63f5ce7b48603637a510e2e78b66d25a3954c60
     )
 }
