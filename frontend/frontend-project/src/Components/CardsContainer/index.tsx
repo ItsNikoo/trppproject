@@ -1,8 +1,7 @@
 import ItemCard from "../ItemCard";
-<<<<<<< HEAD
 import styles from "./CardsContainer.module.css";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 
 interface Photo {
     id: number;
@@ -20,11 +19,11 @@ interface Item {
 
 export default function CardsContainer() {
     async function fetchData() {
-        const { data } = await axios.get("http://127.0.0.1:8000/api/items/");
+        const {data} = await axios.get("http://127.0.0.1:8000/api/items/");
         return data;
     }
 
-    const { data, isLoading, isError } = useQuery<Item[]>({
+    const {data, isLoading, isError} = useQuery<Item[]>({
         queryKey: ['products'],
         queryFn: fetchData,
     });
@@ -56,24 +55,5 @@ export default function CardsContainer() {
                 ))}
             </div>
         </div>
-    );
-=======
-import styles from "./CardsContainer.module.css"
-
-export default function CardsContainer() {
-    return (
-        <div className={styles.MainContainer}>
-            <div className={styles.CardsContainer}>
-                <ItemCard/>
-                <ItemCard/>
-                <ItemCard/>
-                <ItemCard/>
-                <ItemCard/>
-                <ItemCard/>
-                <ItemCard/>
-                <ItemCard/>
-            </div>
-        </div>
     )
->>>>>>> b63f5ce7b48603637a510e2e78b66d25a3954c60
 }

@@ -1,9 +1,5 @@
 from rest_framework import serializers
-<<<<<<< HEAD
 from .models import Category, Item, Photo
-=======
-from .models import Category, Item
->>>>>>> b63f5ce7b48603637a510e2e78b66d25a3954c60
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -12,21 +8,17 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'category']
 
 
-<<<<<<< HEAD
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = ['id', 'photo_url']
 
 
-=======
->>>>>>> b63f5ce7b48603637a510e2e78b66d25a3954c60
 class ItemSerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(
         slug_field='category',
         queryset=Category.objects.all()
     )
-<<<<<<< HEAD
     photos = PhotoSerializer(many=True, required=False)
 
     class Meta:
@@ -65,9 +57,7 @@ class ItemSerializer(serializers.ModelSerializer):
                 instance.photos.add(photo)
 
         return instance
-=======
 
     class Meta:
         model = Item
-        fields = ['id', 'title', 'price', 'description', 'category', 'available', 'preorder', 'amount']
->>>>>>> b63f5ce7b48603637a510e2e78b66d25a3954c60
+        fields = ['id', 'title', 'price', 'description', 'category', 'available', 'preorder', 'amount', 'photos']
