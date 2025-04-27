@@ -1,31 +1,25 @@
 import './App.css'
 import Header from "./Components/Header";
-import GeneralSlider from "./Components/GeneralSlider";
-import CardsContainer from "./Components/CardsContainer";
 import Footer from "./Components/Footer";
-
-const slides = [
-    {
-        title: "Title 1",
-        description: "Description of title 1",
-    },
-    {
-        title: "Title 2",
-        description: "Description of title 2",
-    },
-    {
-        title: "Title 3",
-        description: "Description of title 3",
-    }
-]
+import {Route, Routes} from "react-router";
+import GlobalPage from "./Components/GlobalPage";
+import AboutUsPage from "./Components/AboutUsPage";
+import AdminPanel from "./Components/Admin/AdminPanel";
+import AddItemPage from "./Components/Admin/AddItemPage";
+import UpdateItemPage from "./Components/Admin/UpdateItemPage";
 
 function App() {
 
     return (
         <>
             <Header/>
-            <GeneralSlider slides={slides} />
-            <CardsContainer/>
+            <Routes>
+                <Route path={'/admin'} element={<AdminPanel/>} />
+                <Route path={'/admin/add'} element={<AddItemPage/>} />
+                <Route path={'/admin/update/:id'} element={<UpdateItemPage />} />
+                <Route index element={<GlobalPage/>}/>
+                <Route path={'/about'} element={<AboutUsPage/>}/>
+            </Routes>
             <Footer/>
         </>
     )

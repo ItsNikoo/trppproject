@@ -1,4 +1,5 @@
 import styles from './Header.module.css'
+import {Link} from "react-router";
 
 export default function Header() {
     return (
@@ -9,9 +10,21 @@ export default function Header() {
                 </div>
                 <div>
                     <ul className={styles.List}>
-                        <li className={styles.ListItem}>Главная</li>
-                        <li className={styles.ListItem}>Каталог</li>
-                        <li className={styles.ListItem}>О нас</li>
+                        <li className={styles.ListItem}>
+                            <Link className={styles.Link} to={"/"}>
+                                Главная
+                            </Link>
+                        </li>
+                        <li className={styles.ListItem}>
+                            <Link className={styles.Link} to={"/catalog"}>
+                                Каталог
+                            </Link>
+                        </li>
+                        <li className={styles.ListItem}>
+                            <Link className={styles.Link} to={"/about"}>
+                                О нас
+                            </Link>
+                        </li>
                     </ul>
                 </div>
                 <div className={styles.Cart}>123</div>

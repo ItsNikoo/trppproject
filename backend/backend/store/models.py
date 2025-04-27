@@ -7,6 +7,7 @@ from rest_framework.fields import BooleanField
 # Create your models here.
 class Category(models.Model):
     category = models.CharField(max_length=100, unique=True)
+    category_name = models.CharField(max_length=100, unique=True)
 
 
 class Photo(models.Model):
@@ -23,7 +24,6 @@ class Item(models.Model):
         on_delete=models.CASCADE,
         related_name='items'
     )
-    hit = models.BooleanField(default=False)
     available = models.BooleanField(default=False)
     preorder = models.BooleanField(default=True)
     amount = models.IntegerField()
