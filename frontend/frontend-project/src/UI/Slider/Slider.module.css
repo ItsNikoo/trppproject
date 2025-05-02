@@ -1,0 +1,57 @@
+.Container {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+.Photos {
+    position: relative;
+    width: 100%;
+}
+
+.ArrayContainer {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+}
+
+.SmallPhoto {
+    width: 10%;
+    cursor: pointer;
+}
+
+.SmallPhoto:hover {
+    opacity: 0.7;
+    transition: 0.5s;
+}
+
+.Photo {
+    width: 100%;
+    height: auto;
+}
+
+.PrevButton, .NextButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    color: black;
+    border-radius: 50%;
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    border: none;
+}
+
+.PrevButton {
+    left: 10px; /* Позиция стрелочки слева */
+}
+
+.NextButton {
+    right: 10px; /* Позиция стрелочки справа */
+}

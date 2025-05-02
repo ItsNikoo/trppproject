@@ -18,6 +18,7 @@ class Item(models.Model):
     title = models.CharField(max_length=100, unique=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     slug = models.CharField(max_length=100, unique=True)
+    is_featured = models.BooleanField(default=False)
     description = models.TextField()
     category = models.ForeignKey(
         Category,

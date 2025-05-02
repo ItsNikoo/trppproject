@@ -21,12 +21,6 @@ class ItemSerializer(serializers.ModelSerializer):
     )
     photos = PhotoSerializer(many=True, required=False)
 
-    class Meta:
-        model = Item
-        fields = ['id', 'title', 'price', 'slug', 'description', 'category',
-                  'available', 'preorder', 'amount', 'photos']
-        read_only_fields = ['slug']
-
     def create(self, validated_data):
         photos_data = validated_data.pop('photos', [])
         item = Item.objects.create(**validated_data)
@@ -60,4 +54,6 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ['id', 'title', 'price', 'slug', 'description', 'category', 'available', 'preorder', 'amount', 'photos']
+        fields = ['id', 'title', 'price', 'slug', 'is_featured', 'description', 'category', 'available', 'preorder',
+                  'amount',
+                  'photos']

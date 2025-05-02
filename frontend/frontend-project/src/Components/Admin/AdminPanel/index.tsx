@@ -1,9 +1,11 @@
 import axios from "axios";
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import styles from "./AdminPanel.module.css";
 import DeleteButton from "../../../UI/DeleteButton";
 import PATCHButton from "../../../UI/PATCHButton";
 import AddProductButton from "../../../UI/AddProductButton";
+import Switch from "@mui/material/Switch";
+
 
 interface Photo {
     id: number;
@@ -14,6 +16,7 @@ interface Item {
     id: number;
     title: string;
     slug: string;
+    is_featured: boolean;
     category: string;
     price: number;
     available: boolean;
@@ -22,6 +25,7 @@ interface Item {
 }
 
 export default function AdminPanel() {
+    const queryClient = useQueryClient();
     async function fetchData() {
         try {
             const {data} = await axios.get("http://127.0.0.1:8000/api/items/");
@@ -34,6 +38,15 @@ export default function AdminPanel() {
     const {data, isLoading, isError} = useQuery<Item[]>({
         queryKey: ['products'],
         queryFn: fetchData,
+    });
+
+    const mutation = useMutation({
+        mutationFn: async ({id, is_featured}: { id: number, is_featured: boolean }) => {
+            return axios.patch(`http://127.0.0.1:8000/api/items/${id}/`, {is_featured});
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['products']});
+        }
     });
 
 
@@ -62,7 +75,20 @@ export default function AdminPanel() {
                         </div>
                         <div className={styles.ButtonsContainer}>
                             <DeleteButton id={item.id}/>
-                            <PATCHButton id={item.id} />
+                            <PATCHButton id={item.id}/>
+                        </div>
+                        <div>
+                            <label>На первой полосе</label>
+                            <Switch
+                                checked={item.is_featured}
+                                onChange={() =>
+                                    mutation.mutate({
+                                        id: item.id,
+                                        is_featured: !item.is_featured
+                                    })
+                                }
+                                color="primary"
+                            />
                         </div>
                     </div>
                 )))}

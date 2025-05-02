@@ -1,0 +1,33 @@
+.MainContainer {
+    display: flex;
+    margin: 30px 150px 0 150px;
+}
+
+.PhotoContainer {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    padding: 0 50px;
+}
+
+.InfoContainer {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 30px 30px 0;
+}
+
+.PriceContainer {
+    font-size: 18px;
+}
+
+.Button{
+    background-color: black;
+    color:white;
+    border: none;
+    width: fit-content;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}

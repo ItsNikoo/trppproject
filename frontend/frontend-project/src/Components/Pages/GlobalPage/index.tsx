@@ -1,5 +1,5 @@
-import GeneralSlider from "../GeneralSlider";
-import CardsContainer from "../CardsContainer";
+import GeneralSlider from "../../GeneralSlider";
+import CardsContainer from "../../CardsContainer";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 
@@ -12,6 +12,7 @@ interface Item {
     id: number;
     title: string;
     slug: string;
+    is_featured: boolean;
     category: string;
     price: number;
     available: boolean;
@@ -19,26 +20,9 @@ interface Item {
     photos: Photo[];
 }
 
-const slides = [
-    {
-        title: "Title 1",
-        description: "Description of title 1",
-    },
-    {
-        title: "Title 2",
-        description: "Description of title 2",
-    },
-    {
-        title: "Title 3",
-        description: "Description of title 3",
-    }
-]
-
-
 export default function GlobalPage() {
     async function fetchData() {
         const {data} = await axios.get("http://127.0.0.1:8000/api/items/");
-        console.log(data)
         return data;
     }
 
@@ -57,7 +41,7 @@ export default function GlobalPage() {
 
     return (
         <>
-            <GeneralSlider slides={slides}/>
+            <GeneralSlider />
             {data && <CardsContainer data={data}/>}
         </>
     )
