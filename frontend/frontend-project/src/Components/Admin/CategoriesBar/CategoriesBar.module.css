@@ -1,0 +1,11 @@
+.CategoriesContainer {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.MainContainer{
+    display: flex;
+    flex-direction: column;
+    margin: 20px 50px;
+}

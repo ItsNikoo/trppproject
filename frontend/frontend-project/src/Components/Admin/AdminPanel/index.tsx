@@ -3,7 +3,7 @@ import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import styles from "./AdminPanel.module.css";
 import DeleteButton from "../../../UI/DeleteButton";
 import PATCHButton from "../../../UI/PATCHButton";
-import AddProductButton from "../../../UI/AddProductButton";
+import CategoriesBar from "../CategoriesBar";
 import Switch from "@mui/material/Switch";
 
 
@@ -61,7 +61,7 @@ export default function AdminPanel() {
     return (
         <div>
             <h1>Админ панель</h1>
-            <AddProductButton />
+            <CategoriesBar/>
             {data && <div className={styles.CardsContainer}>
                 {data.map((item => (
                     <div className={styles.Card} key={item.id}>

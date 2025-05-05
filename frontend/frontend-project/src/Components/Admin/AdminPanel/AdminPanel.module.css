@@ -1,11 +1,11 @@
 .Card {
     display: flex;
     flex-direction: column;
-    background-color: cornflowerblue;
     align-items: center;
     width: 400px;
     padding: 10px;
     border-radius: 10px;
+    border: 2px solid black;
 }
 
 .ImageContainer {

@@ -1,10 +1,11 @@
-import {useParams, useNavigate} from "react-router";
+import {useParams} from "react-router";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {useState, useEffect} from "react";
 import RedirectToAdminPanelButton from "../../../UI/RedirectToAdminPanelButton";
 import {Autocomplete, TextField, Checkbox, FormGroup, FormControlLabel} from "@mui/material";
 import styles from "./UpdateItemPage.module.css"
+import UploadFilesArea from "../../../UI/UploadFilesArea";
 
 
 interface Photo {
@@ -32,10 +33,10 @@ interface Category {
 
 export default function UpdateItemPage() {
     const id = useParams().id;
-    const navigate = useNavigate()
     const [newItem, setNewItem] = useState<Item | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [status, setStatus] = useState<string>('');
 
     async function fetchItem(id: number) {
         try {
@@ -65,6 +66,18 @@ export default function UpdateItemPage() {
         loadCategories()
     }, []);
 
+    useEffect(() => {
+        function clearStatus() {
+            setStatus('');
+        }
+
+        document.addEventListener('click', clearStatus);
+
+        return () => {
+            document.removeEventListener('click', clearStatus);
+        };
+    }, []);
+
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const {name, value, type, checked} = e.target;
         if (newItem) {
@@ -75,8 +88,11 @@ export default function UpdateItemPage() {
         }
     }
 
-    function handleCategoryChange(_: any, value: Category | null) {
-        setSelectedCategory(value)
+    function handleCategoryChange(
+        _: unknown,
+        value: Category | null
+    ) {
+        setSelectedCategory(value);
         if (newItem && value) {
             setNewItem({
                 ...newItem,
@@ -85,11 +101,13 @@ export default function UpdateItemPage() {
         }
     }
 
+
     async function patchItem(id: number, item: Item) {
         try {
             const response = await axios.patch(`http://127.0.0.1:8000/api/items/${id}/`, item)
             console.log("Товар обновлён успешно", response.data);
-            navigate('/admin')
+            //navigate('/admin')
+            setStatus("Товар обновлён")
         } catch (error) {
             console.error("Ошибка при обновлении товара", error);
         }
@@ -189,7 +207,18 @@ export default function UpdateItemPage() {
                             onChange={handleChange}
                             fullWidth
                         />
+                        <UploadFilesArea
+                            folder={newItem.slug}
+                            id={id}
+                            onUploadSuccess={(uploadedPhotos) => {
+                                setNewItem((prev) => prev ? ({
+                                    ...prev,
+                                    photos: uploadedPhotos,
+                                }) : null);
+                            }}
+                        />
                         <button className={styles.Button} type={'submit'}>Отправить</button>
+                        <p className={styles.Status}>{status}</p>
                     </form>
                 }
             </div>
