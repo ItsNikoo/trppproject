@@ -9,3 +9,8 @@
     flex-direction: column;
     margin: 20px 50px;
 }
+
+.Buttons{
+    display: flex;
+    gap: 1rem;
+}

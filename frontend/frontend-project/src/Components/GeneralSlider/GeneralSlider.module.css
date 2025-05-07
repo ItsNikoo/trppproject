@@ -83,3 +83,9 @@ button {
 .dot.active {
     background-color: #000000;
 }
+
+
+.Link{
+    text-decoration: none;
+    color: inherit;
+}

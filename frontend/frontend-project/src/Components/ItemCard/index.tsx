@@ -8,8 +8,10 @@ interface Photo {
 }
 
 interface ItemProps {
+    id: number;
     title: string;
     slug: string;
+    is_featured: boolean;
     category: string;
     price: number;
     available: boolean;
@@ -17,26 +19,40 @@ interface ItemProps {
     photos?: Photo[];
 }
 
-export default function ItemCard({title, price, available, preorder, photos, slug, category}: ItemProps) {
+interface ItemCardProps{
+    item: ItemProps
+}
+
+export default function ItemCard({item}: ItemCardProps) {
     const [hovered, setHovered] = useState(false);
 
     return (
-        <Link to={`/${category}/${slug}`} className={styles.MainContainer}>
+        <Link to={`/${item.category}/${item.slug}`} className={styles.MainContainer}>
             <div className={styles.PhotoContainer}>
-                {photos && photos.length > 0 && (
+                {item.photos && item.photos.length > 0 && (
                     <img className={styles.photo}
                          onMouseEnter={() => setHovered(true)}
                          onMouseLeave={() => setHovered(false)}
-                         src={hovered ? photos[1].photo_url : photos[0].photo_url} alt=""/>
+                         src={
+                             item.photos.length > 1 && hovered
+                                 ? item.photos[1].photo_url
+                                 : item.photos[0].photo_url
+                         }
+                         alt=""
+                    />
                 )}
             </div>
             <div className={styles.ContentContainer}>
-                <h1 className={styles.Title}>{title}</h1>
-                <p className={styles.Price}>{price}</p>
-                <p className={`${styles.Preorder} ${!preorder ? styles.hidden : ''}`}>
+                <h1 className={styles.Title}>{item.title}</h1>
+                <p className={styles.Price}>{item.price}</p>
+                <p className={`${styles.Preorder} ${!item.preorder ? styles.hidden : ''}`}>
                     Предзаказ
                 </p>
-                <p>{available}</p>
+                {!item.available && (
+                    <p className={`${styles.NotAvailable} ${item.available ? styles.hidden : ''}`}>
+                        Нет в наличии
+                    </p>
+                )}
             </div>
         </Link>
     )

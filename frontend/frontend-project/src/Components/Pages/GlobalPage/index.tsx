@@ -11,10 +11,11 @@ interface Photo {
 interface Item {
     id: number;
     title: string;
+    price: number;
     slug: string;
     is_featured: boolean;
+    description: string;
     category: string;
-    price: number;
     available: boolean;
     preorder: boolean;
     photos: Photo[];

@@ -9,9 +9,11 @@ interface Photo {
 interface Item {
     id: number;
     title: string;
-    slug: string;
-    category: string;
     price: number;
+    slug: string;
+    is_featured: boolean;
+    description: string;
+    category: string;
     available: boolean;
     preorder: boolean;
     photos: Photo[];
@@ -26,16 +28,7 @@ export default function CardsContainer({data}: { data: Item[] }) {
         <div className={styles.MainContainer}>
             <div className={styles.CardsContainer}>
                 {data.map((item) => (
-                    <ItemCard
-                        key={item.id}
-                        title={item.title}
-                        price={item.price}
-                        available={item.available}
-                        preorder={item.preorder}
-                        photos={item.photos}
-                        slug={item.slug}
-                        category={item.category}
-                    />
+                    <ItemCard item={item} key={item.id}/>
                 ))}
             </div>
         </div>

@@ -26,6 +26,7 @@ interface Item {
 
 export default function AdminPanel() {
     const queryClient = useQueryClient();
+
     async function fetchData() {
         try {
             const {data} = await axios.get("http://127.0.0.1:8000/api/items/");
@@ -41,8 +42,19 @@ export default function AdminPanel() {
     });
 
     const mutation = useMutation({
-        mutationFn: async ({id, is_featured}: { id: number, is_featured: boolean }) => {
-            return axios.patch(`http://127.0.0.1:8000/api/items/${id}/`, {is_featured});
+        mutationFn: async ({id, is_featured, available, preorder}: {
+            id: number,
+            is_featured?: boolean,
+            available?: boolean,
+            preorder?: boolean
+        }) => {
+            const payload: Partial<Item> = {
+                is_featured: is_featured,
+                available: available,
+                preorder: preorder
+            };
+
+            return axios.patch(`http://127.0.0.1:8000/api/items/${id}/`, payload);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['products']});
@@ -85,6 +97,32 @@ export default function AdminPanel() {
                                     mutation.mutate({
                                         id: item.id,
                                         is_featured: !item.is_featured
+                                    })
+                                }
+                                color="primary"
+                            />
+                        </div>
+                        <div>
+                            <label>В наличии</label>
+                            <Switch
+                                checked={item.available}
+                                onChange={() =>
+                                    mutation.mutate({
+                                        id: item.id,
+                                        available: !item.available
+                                    })
+                                }
+                                color="primary"
+                            />
+                        </div>
+                        <div>
+                            <label>Предзаказ</label>
+                            <Switch
+                                checked={item.preorder}
+                                onChange={() =>
+                                    mutation.mutate({
+                                        id: item.id,
+                                        preorder: !item.preorder
                                     })
                                 }
                                 color="primary"

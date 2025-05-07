@@ -1,16 +1,17 @@
 import styles from './Header.module.css'
 import {Link} from "react-router";
+import logo from "../../assets/logo.jpg"
 
 export default function Header() {
     return (
         <>
             <div className={styles.Container}>
-                <div className={styles.Logo}>
-                    <p>logo</p>
-                </div>
+                <Link to={'/'}>
+                    <img className={styles.Logo} src={logo} alt=""/>
+                </Link>
                 <div>
-                    <ul className={styles.List}>
-                        <li className={styles.ListItem}>
+                <ul className={styles.List}>
+                    <li className={styles.ListItem}>
                             <Link className={styles.Link} to={"/"}>
                                 Главная
                             </Link>

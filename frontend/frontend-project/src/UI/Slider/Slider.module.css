@@ -1,5 +1,6 @@
 .Container {
     width: 90%;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -7,8 +8,13 @@
 .Photos {
     position: relative;
     width: 100%;
+    height: 80%; /* основное пространство для главного фото */
+    min-height: 400px; /* или любая другая фиксированная высота */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
-
 .ArrayContainer {
     display: flex;
     gap: 5px;

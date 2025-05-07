@@ -1,10 +1,17 @@
+h1 {
+    margin: 0;
+    padding: 0;
+}
+
 .MainContainer {
     display: flex;
     margin: 30px 150px 0 150px;
+    height: 90vh;
 }
 
 .PhotoContainer {
     width: 50%;
+    height: 100%;
     display: flex;
     justify-content: center;
     padding: 0 50px;
@@ -15,19 +22,83 @@
     display: flex;
     flex-direction: column;
     padding: 30px 30px 30px 0;
+    gap: 10px;
 }
 
 .PriceContainer {
     font-size: 18px;
 }
 
-.Button{
+.Title {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.Button {
     background-color: black;
-    color:white;
+    color: white;
     border: none;
     width: fit-content;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 15px;
+}
+
+.Select {
+    width: 30%
+}
+
+.Description {
+    border-radius: 10px;
+    background-color: #efefef;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.Description p {
+    margin-bottom: 10px;
+    border: none;
+    padding: 0;
+}
+
+.Description h1 {
+    margin: 0;
+    padding: 10px 0;
+    font-size: 22px;
+}
+
+/* Стили для заголовка с выравниванием */
+.Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Стили для стрелочки */
+.Arrow {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #333;
+    border-bottom: 2px solid #333;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+    margin-right: 10px;
+}
+
+/* Поворот стрелочки при открытии */
+.ArrowOpen {
+    transform: rotate(-135deg);
+}
+
+/* Стили для анимации содержимого */
+.DescriptionContent {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.DescriptionContent.Open {
+    max-height: 500px; /* Достаточно большое значение для любого текста */
+    transition: max-height 0.5s ease-in;
 }

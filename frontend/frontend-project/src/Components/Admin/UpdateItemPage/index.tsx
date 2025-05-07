@@ -1,115 +1,122 @@
-import {useParams} from "react-router";
-import axios from "axios";
-import {useQuery} from "@tanstack/react-query";
-import {useState, useEffect} from "react";
-import RedirectToAdminPanelButton from "../../../UI/RedirectToAdminPanelButton";
-import {Autocomplete, TextField, Checkbox, FormGroup, FormControlLabel} from "@mui/material";
-import styles from "./UpdateItemPage.module.css"
-import UploadFilesArea from "../../../UI/UploadFilesArea";
+"use client"
 
+import type React from "react"
+
+import { useParams, useNavigate } from "react-router"
+import axios from "axios"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useState, useEffect } from "react"
+import RedirectToAdminPanelButton from "../../../UI/RedirectToAdminPanelButton"
+import {
+    Autocomplete,
+    TextField,
+    Checkbox,
+    FormGroup,
+    FormControlLabel,
+    Alert,
+    CircularProgress,
+    Button,
+} from "@mui/material"
+import styles from "./UpdateItemPage.module.css"
+import UploadFilesArea from "../../../UI/UploadFilesArea"
 
 interface Photo {
-    id: number;
-    photo_url: string;
+    id: number
+    photo_url: string
 }
 
 interface Item {
-    title: string;
-    slug: string;
-    category: string;
-    description: string;
-    price: number;
-    available: boolean;
-    preorder: boolean;
-    amount: number;
-    photos?: Photo[];
+    title: string
+    slug: string
+    category: string
+    description: string
+    price: number
+    available: boolean
+    preorder: boolean
+    amount: number
+    photos?: Photo[]
 }
 
 interface Category {
-    id: number;
-    category: string;
-    category_name: string;
+    id: number
+    category: string
+    category_name: string
 }
 
 export default function UpdateItemPage() {
-    const id = useParams().id;
-    const [newItem, setNewItem] = useState<Item | null>(null);
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-    const [status, setStatus] = useState<string>('');
+    const { id } = useParams()
+    const navigate = useNavigate()
+    const queryClient = useQueryClient()
+    const [newItem, setNewItem] = useState<Item | null>(null)
+    const [categories, setCategories] = useState<Category[]>([])
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
+    const [success, setSuccess] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
 
     async function fetchItem(id: number) {
         try {
             const item = await axios.get(`http://127.0.0.1:8000/api/items/${id}`)
-            return item.data;
+            return item.data
         } catch (error) {
             console.log(error)
+            throw error
         }
     }
 
-    const {data, isLoading, isError} = useQuery<Item>({
-        queryKey: ['item', id],
+    const { data, isLoading, isError } = useQuery<Item>({
+        queryKey: ["item", id],
         queryFn: () => fetchItem(Number(id)),
+        enabled: !!id,
+    })
+
+    // Мутация для обновления товара
+    const updateMutation = useMutation({
+        mutationFn: async (item: Item) => {
+            const response = await axios.patch(`http://127.0.0.1:8000/api/items/${id}/`, item)
+            return response.data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["item", id] })
+            setSuccess(true)
+            setTimeout(() => setSuccess(false), 3000)
+        },
+        onError: (error: any) => {
+            setError(error.message || "Произошла ошибка при обновлении товара")
+            setTimeout(() => setError(null), 3000)
+        },
     })
 
     useEffect(() => {
         if (data) {
-            setNewItem(data);
+            setNewItem(data)
             if (data.category && categories.length > 0) {
-                const currentCategory = categories.find(cat => cat.category === data.category);
-                setSelectedCategory(currentCategory || null);
+                const currentCategory = categories.find((cat) => cat.category === data.category)
+                setSelectedCategory(currentCategory || null)
             }
         }
-    }, [data, categories]);
+    }, [data, categories])
 
     useEffect(() => {
         loadCategories()
-    }, []);
-
-    useEffect(() => {
-        function clearStatus() {
-            setStatus('');
-        }
-
-        document.addEventListener('click', clearStatus);
-
-        return () => {
-            document.removeEventListener('click', clearStatus);
-        };
-    }, []);
+    }, [])
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const {name, value, type, checked} = e.target;
+        const { name, value, type, checked } = e.target
         if (newItem) {
-            setNewItem(prevState => ({
+            setNewItem((prevState) => ({
                 ...prevState!,
                 [name]: type === "checkbox" ? checked : value,
-            }));
+            }))
         }
     }
 
-    function handleCategoryChange(
-        _: unknown,
-        value: Category | null
-    ) {
-        setSelectedCategory(value);
+    function handleCategoryChange(_: unknown, value: Category | null) {
+        setSelectedCategory(value)
         if (newItem && value) {
             setNewItem({
                 ...newItem,
-                category: value.category
-            });
-        }
-    }
-
-
-    async function patchItem(id: number, item: Item) {
-        try {
-            const response = await axios.patch(`http://127.0.0.1:8000/api/items/${id}/`, item)
-            console.log("Товар обновлён успешно", response.data);
-            //navigate('/admin')
-            setStatus("Товар обновлён")
-        } catch (error) {
-            console.error("Ошибка при обновлении товара", error);
+                category: value.category,
+            })
         }
     }
 
@@ -117,47 +124,80 @@ export default function UpdateItemPage() {
         e.preventDefault()
 
         if (newItem && id) {
-            const numericId = Number(id);
+            const numericId = Number(id)
             if (!isNaN(numericId)) {
-                patchItem(numericId, newItem);
+                updateMutation.mutate(newItem)
             } else {
-                console.error("Неверный ID товара");
+                setError("Неверный ID товара")
             }
         } else {
-            console.error("Нет данных для отправки");
+            setError("Нет данных для отправки")
         }
     }
 
     async function loadCategories() {
         try {
-            const response = await axios.get("http://127.0.0.1:8000/api/categories/");
-            setCategories(response.data);
+            const response = await axios.get("http://127.0.0.1:8000/api/categories/")
+            setCategories(response.data)
         } catch (error) {
-            console.error('Ошибка получения категорий:', error);
+            console.error("Ошибка получения категорий:", error)
+            setError("Ошибка загрузки категорий")
         }
     }
 
+    if (isLoading) {
+        return (
+            <div className={styles.ContainerForm}>
+                <div className={styles.MainContainer}>
+                    <CircularProgress />
+                    <p>Загрузка данных...</p>
+                </div>
+            </div>
+        )
+    }
 
-    if (isLoading) return <div>Загрузка</div>
-
-    if (isError) return <div>Ошибка загрузки данных</div>
+    if (isError) {
+        return (
+            <div className={styles.ContainerForm}>
+                <div className={styles.MainContainer}>
+                    <Alert severity="error">Ошибка загрузки данных товара</Alert>
+                    <Button variant="contained" onClick={() => navigate(-1)} style={{ marginTop: "20px" }}>
+                        Вернуться назад
+                    </Button>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className={styles.ContainerForm}>
             <div className={styles.MainContainer}>
                 <h1>Страница товара {id}</h1>
-                <RedirectToAdminPanelButton/>
-                {newItem &&
+                <RedirectToAdminPanelButton />
+
+                {success && (
+                    <Alert severity="success" style={{ marginBottom: "20px" }}>
+                        Товар успешно обновлен!
+                    </Alert>
+                )}
+
+                {error && (
+                    <Alert severity="error" style={{ marginBottom: "20px" }}>
+                        {error}
+                    </Alert>
+                )}
+
+                {newItem && (
                     <form onSubmit={handleSubmit} className={styles.Form}>
                         <TextField
-                            name={'title'}
+                            name="title"
                             label="Название"
                             value={newItem.title}
                             onChange={handleChange}
                             fullWidth
                         />
                         <TextField
-                            name={'slug'}
+                            name="slug"
                             label="Slug"
                             value={newItem.slug}
                             onChange={handleChange}
@@ -168,13 +208,11 @@ export default function UpdateItemPage() {
                             getOptionLabel={(option) => option.category_name}
                             value={selectedCategory}
                             onChange={handleCategoryChange}
-                            renderInput={(params) => (
-                                <TextField {...params} label="Категория" className={styles.Input}/>
-                            )}
+                            renderInput={(params) => <TextField {...params} label="Категория" className={styles.Input} />}
                             fullWidth
                         />
                         <TextField
-                            name={'price'}
+                            name="price"
                             label="Цена"
                             type="number"
                             value={newItem.price}
@@ -182,45 +220,65 @@ export default function UpdateItemPage() {
                             fullWidth
                         />
                         <TextField
-                            name={'description'}
+                            name="description"
                             label="Описание"
                             type="text"
                             value={newItem.description}
                             onChange={handleChange}
                             fullWidth
+                            multiline
+                            rows={4}
                         />
                         <FormGroup>
-                            <FormControlLabel control={<Checkbox
-                                checked={newItem.available}
-                                onChange={(e) => setNewItem({...newItem, available: e.target.checked})}
-                            />} label="Доступно"/>
-                            <FormControlLabel control={<Checkbox
-                                checked={newItem.preorder}
-                                onChange={(e) => setNewItem({...newItem, preorder: e.target.checked})}
-                            />} label="Предзаказ"/>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={newItem.available}
+                                        onChange={(e) => setNewItem({ ...newItem, available: e.target.checked })}
+                                        name="available"
+                                    />
+                                }
+                                label="Доступно"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={newItem.preorder}
+                                        onChange={(e) => setNewItem({ ...newItem, preorder: e.target.checked })}
+                                        name="preorder"
+                                    />
+                                }
+                                label="Предзаказ"
+                            />
                         </FormGroup>
                         <TextField
-                            name={'amount'}
+                            name="amount"
                             label="Количество"
                             type="number"
                             value={newItem.amount}
                             onChange={handleChange}
                             fullWidth
                         />
-                        <UploadFilesArea
-                            folder={newItem.slug}
-                            id={id}
-                            onUploadSuccess={(uploadedPhotos) => {
-                                setNewItem((prev) => prev ? ({
-                                    ...prev,
-                                    photos: uploadedPhotos,
-                                }) : null);
-                            }}
-                        />
-                        <button className={styles.Button} type={'submit'}>Отправить</button>
-                        <p className={styles.Status}>{status}</p>
+                        <div>
+                            <UploadFilesArea
+                                folder={newItem.slug}
+                                id={id}
+                                onUploadSuccess={(uploadedPhotos) => {
+                                    setNewItem((prev) => (prev ? { ...prev, photos: uploadedPhotos } : null))
+                                }}
+                            />
+                        </div>
+                        <Button
+                            className={styles.Button}
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            disabled={updateMutation.isPending}
+                        >
+                            {updateMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
+                        </Button>
                     </form>
-                }
+                )}
             </div>
         </div>
     )

@@ -3,6 +3,7 @@ import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import styles from "./CategoriesBar.module.css"
 import CategoryCard from "./CategoryCard";
+import AddCategoryButton from "../../../UI/AddCategoryButton";
 
 interface Category {
     id: number;
@@ -37,7 +38,10 @@ export default function CategoriesBar() {
                     <CategoryCard category={category}/>
                 ))}
             </div>
-            <AddProductButton />
+            <div className={styles.Buttons}>
+                <AddProductButton />
+                <AddCategoryButton />
+            </div>
         </div>
     )
 }

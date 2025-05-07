@@ -3,6 +3,7 @@ import {useState} from 'react';
 import styles from "./GeneralSlider.module.css"
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
+import {Link} from "react-router";
 
 interface Photo {
     id: number;
@@ -51,9 +52,9 @@ export default function GeneralSlider() {
         setCurrentIndex(index);
     }
 
-    const currentItem = slides[currentIndex];
+    const currentItem: Item = slides[currentIndex];
 
-    if (isLoading){
+    if (isLoading) {
         return <div>Loading</div>
     }
 
@@ -63,21 +64,24 @@ export default function GeneralSlider() {
         <div className={styles.mainContainer}>
             <div className={styles.ItemsContainer}>
                 <button onClick={prevSlide}>{`<`}</button>
-                <div className={styles.Item}>
-                    <div className={styles.PhotoContainer}>
-                        {currentItem.photos && currentItem.photos.length > 0 && (
-                            <img
-                                onMouseEnter={() => setHovered(true)}
-                                onMouseLeave={() => setHovered(false)}
-                                src={hovered ? currentItem.photos[1].photo_url : currentItem.photos[0].photo_url} alt=""/>
-                        )}
+                <Link className={styles.Link} to={`${currentItem.category}/${currentItem.slug}`}>
+                    <div className={styles.Item}>
+                        <div className={styles.PhotoContainer}>
+                            {currentItem.photos && currentItem.photos.length > 0 && (
+                                <img
+                                    onMouseEnter={() => setHovered(true)}
+                                    onMouseLeave={() => setHovered(false)}
+                                    src={hovered ? currentItem.photos[1].photo_url : currentItem.photos[0].photo_url}
+                                    alt=""/>
+                            )}
+                        </div>
+                        <div className={styles.InfoContainer}>
+                            <h2>{currentItem.title}</h2>
+                            <p>{currentItem.category}</p>
+                            <p>{currentItem.price}₽</p>
+                        </div>
                     </div>
-                    <div className={styles.InfoContainer}>
-                        <h2>{currentItem.title}</h2>
-                        <p>{currentItem.category}</p>
-                        <p>{currentItem.price}₽</p>
-                    </div>
-                </div>
+                </Link>
                 <button onClick={nextSlide}>{`>`}</button>
             </div>
             <div className={styles.dots}>

@@ -1,5 +1,5 @@
-import {useState} from "react";
-import axios from "axios";
+import {useState, useRef} from "react";
+import axios, {AxiosError} from "axios";
 
 interface Photo {
     id: number;
@@ -12,17 +12,19 @@ interface UploadFilesAreaProps {
     onUploadSuccess?: (photos: Photo[]) => void;
 }
 
-export default function UploadFilesArea({folder, id, onUploadSuccess}: UploadFilesAreaProps) {
+export default function UploadFilesArea({folder, onUploadSuccess}: UploadFilesAreaProps) {
     const [files, setFiles] = useState<File[]>([]);
     const [status, setStatus] = useState<string>("");
-    const [uploadedPhotos, setUploadedPhotos] = useState<Photo[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
+    // Обработка выбора файлов
     function handleFilesChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (event.target.files) {
             setFiles(Array.from(event.target.files));
         }
     }
 
+    // Загрузка фотографий на сервер
     async function uploadPhotos(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault();
         event.stopPropagation();
@@ -43,15 +45,8 @@ export default function UploadFilesArea({folder, id, onUploadSuccess}: UploadFil
         try {
             const response = await axios.post<{ photos: Photo[] }>(
                 "http://127.0.0.1:8000/api/upload-photos/",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
+                formData
             );
-
-            console.log("Ответ API upload-photos:", response.data);
 
             const photos = response.data.photos;
 
@@ -65,23 +60,35 @@ export default function UploadFilesArea({folder, id, onUploadSuccess}: UploadFil
                 return;
             }
 
-            setUploadedPhotos((prev) => [...prev, ...photos]);
             onUploadSuccess?.(photos);
             setFiles([]);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = ""; // Сброс поля ввода
+            }
             setStatus("Файлы успешно загружены");
-        } catch (error: any) {
-            console.error("Ошибка загрузки файла:", error.response?.data || error.message);
-            if (error.response?.data?.code === "NoSuchKey") {
-                setStatus("Ошибка: Файл не найден в S3. Проверьте конфигурацию хранилища.");
+        } catch (error: unknown) {
+            if (error instanceof AxiosError) {
+                const errorMessage = error.response?.data?.message || error.message || "Неизвестная ошибка";
+                if (error.response?.data?.code === "NoSuchKey") {
+                    setStatus("Ошибка: Файл не найден в S3. Проверьте конфигурацию хранилища.");
+                } else {
+                    setStatus(`Ошибка загрузки файла: ${errorMessage}`);
+                }
             } else {
-                setStatus(`Ошибка загрузки файла: ${error.message}`);
+                setStatus("Неизвестная ошибка при загрузке файла");
             }
         }
     }
 
     return (
         <div>
-            <input type="file" multiple onChange={handleFilesChange}/>
+            <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleFilesChange}
+                ref={fileInputRef}
+            />
             <button type="button" onClick={uploadPhotos}>
                 Загрузить фото
             </button>
