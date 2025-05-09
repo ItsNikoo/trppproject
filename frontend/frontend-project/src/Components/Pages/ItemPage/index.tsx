@@ -43,6 +43,7 @@ export default function ItemPage() {
     useEffect(() => {
         if (data) {
             setItem(data);
+            document.title = data.title;
         }
     }, [data]);
 
@@ -76,7 +77,8 @@ export default function ItemPage() {
                                 console.log(size)
                             }}
                         />
-                        <button className={styles.Button}>В корзину</button>
+                        <button className={`${styles.Button} ${item?.available ? styles.ButtonAvailable : styles.ButtonUnavailable}`}>В корзину</button>
+                        {!item?.available && <p className={styles.Available}>Нет в наличии</p>}
                         <div onClick={() => setIsOpen(!isOpen)} className={styles.Description}>
                             <div className={styles.Header}>
                                 <h1>Описание товара</h1>

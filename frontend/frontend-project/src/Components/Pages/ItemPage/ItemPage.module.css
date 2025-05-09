@@ -102,3 +102,18 @@ h1 {
     max-height: 500px; /* Достаточно большое значение для любого текста */
     transition: max-height 0.5s ease-in;
 }
+
+.Available {
+    color: red;
+    font-size: 16px;
+}
+
+.ButtonAvailable {
+    background-color: #000000;
+}
+
+.ButtonUnavailable {
+    background-color: #efefef;
+    color: #8a8a8a;
+    cursor: not-allowed;
+}

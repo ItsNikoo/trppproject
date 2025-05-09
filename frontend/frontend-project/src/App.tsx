@@ -1,7 +1,7 @@
 import './App.css'
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-import {Route, Routes} from "react-router";
+import {Route, Routes, useLocation} from "react-router";
 import GlobalPage from "./Components/Pages/GlobalPage";
 import AboutUsPage from "./Components/AboutUsPage";
 import AdminPanel from "./Components/Admin/AdminPanel";
@@ -10,8 +10,21 @@ import UpdateItemPage from "./Components/Admin/UpdateItemPage";
 import ItemPage from "./Components/Pages/ItemPage";
 import AddCategoryPage from "./Components/Admin/AddCategoryPage";
 import UpdateCategoryPage from "./Components/Admin/UpdateCategoryPage";
+import {useEffect} from "react";
 
 function App() {
+    const location = useLocation()
+
+    useEffect(() => {
+        switch (location.pathname) {
+            case '/admin':
+                document.title = 'Admin Panel'
+                break
+            default:
+                document.title = 'Homme + Less'
+        }
+
+    }, [location]);
 
     return (
         <>
