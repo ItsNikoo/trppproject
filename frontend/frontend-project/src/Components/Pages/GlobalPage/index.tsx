@@ -2,6 +2,7 @@ import GeneralSlider from "../../GeneralSlider";
 import CardsContainer from "../../CardsContainer";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
+import styles from "./GlobalPage.module.css"
 
 interface Photo {
     id: number;
@@ -41,9 +42,9 @@ export default function GlobalPage() {
     }
 
     return (
-        <>
+        <div className={styles.Container}>
             <GeneralSlider />
             {data && <CardsContainer data={data}/>}
-        </>
+        </div>
     )
 }

@@ -5,6 +5,8 @@ import {useQuery} from "@tanstack/react-query";
 import styles from "./ItemPage.module.css"
 import Slider from "../../../UI/Slider";
 import Select from 'react-select';
+import {motion} from "framer-motion";
+import ItemDescriptionContainer from "../../../UI/ItemDescriptionContainer";
 
 interface Photo {
     id: number;
@@ -26,7 +28,6 @@ export default function ItemPage() {
     const {itemSlug} = useParams();
     const [item, setItem] = useState<ItemProps | null>(null);
     const [size, setSize] = useState<string>("");
-    const [isOpen, setIsOpen] = useState<boolean>(false);
 
 
     async function fetchItem() {
@@ -55,7 +56,13 @@ export default function ItemPage() {
     ];
 
     return (
-        <div>
+        <motion.div
+            initial={{y: -25, opacity: 0}}
+            animate={{y: 0, opacity: 1}}
+            exit={{opacity: 0}}
+            transition={{duration: 0.5}}
+            className={styles.Container}
+        >
             {isLoading && <div>Загрузка...</div>}
             {isError && <div>Ошибка загрузки данных</div>}
             {data && (
@@ -77,20 +84,15 @@ export default function ItemPage() {
                                 console.log(size)
                             }}
                         />
-                        <button className={`${styles.Button} ${item?.available ? styles.ButtonAvailable : styles.ButtonUnavailable}`}>В корзину</button>
+                        <button
+                            className={`${styles.Button} ${item?.available ? styles.ButtonAvailable : styles.ButtonUnavailable}`}>В
+                            корзину
+                        </button>
                         {!item?.available && <p className={styles.Available}>Нет в наличии</p>}
-                        <div onClick={() => setIsOpen(!isOpen)} className={styles.Description}>
-                            <div className={styles.Header}>
-                                <h1>Описание товара</h1>
-                                <div className={`${styles.Arrow} ${isOpen ? styles.ArrowOpen : ""}`}></div>
-                            </div>
-                            <div className={`${styles.DescriptionContent} ${isOpen ? styles.Open : ""}`}>
-                                <p className={styles.Description}>{data.description}</p>
-                            </div>
-                        </div>
+                        <ItemDescriptionContainer description={data.description} />
                     </div>
                 </div>
             )}
-        </div>
+        </motion.div>
     )
 }

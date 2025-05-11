@@ -1,0 +1,38 @@
+h2{
+    margin: 0;
+}
+
+.Default{
+    background-color: #e2e2e2;
+    border-radius: 10px;
+    padding: 10px 25px;
+}
+
+.HigherContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Description p {
+    margin: 10px 0;
+    border: none;
+    padding: 0;
+    font-size: 16px;
+}
+
+.Arrow {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #333;
+    border-bottom: 2px solid #333;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+    margin-right: 10px;
+}
+
+/* Поворот стрелочки при открытии */
+.ArrowOpen {
+    transform: rotate(-135deg);
+}

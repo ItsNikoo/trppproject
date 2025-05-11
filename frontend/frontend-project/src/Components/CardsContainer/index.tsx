@@ -1,5 +1,6 @@
 import ItemCard from "../ItemCard";
 import styles from "./CardsContainer.module.css";
+import {motion} from "framer-motion";
 
 interface Photo {
     id: number;
@@ -25,12 +26,17 @@ export default function CardsContainer({data}: { data: Item[] }) {
     }
 
     return (
-        <div className={styles.MainContainer}>
+        <motion.div className={styles.MainContainer}
+            initial={{y: -25, opacity: 0}}
+            animate={{y: 0, opacity: 1}}
+            exit={{opacity: 0}}
+            transition={{duration: 0.5}}
+        >
             <div className={styles.CardsContainer}>
                 {data.map((item) => (
                     <ItemCard item={item} key={item.id}/>
                 ))}
             </div>
-        </div>
+        </motion.div>
     )
 }
