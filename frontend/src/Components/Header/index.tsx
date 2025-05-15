@@ -1,6 +1,7 @@
 import styles from './Header.module.css'
 import {Link} from "react-router";
 import logo from "../../assets/logo.jpg"
+import cart from "../../../public/shopping-cart-outline-svgrepo-com.svg"
 
 export default function Header() {
     return (
@@ -28,7 +29,9 @@ export default function Header() {
                         </li>
                     </ul>
                 </div>
-                <div className={styles.Cart}>123</div>
+                <div className={styles.Cart}>
+                    <img className={styles.Image} src={cart} alt=""/>
+                </div>
             </div>
         </>
     )

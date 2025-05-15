@@ -28,7 +28,7 @@ Frontend-часть - SPA приложение, написанное на React 
 
 Полный список зависимостей находится в файле `requirements.txt`.
 
-## ⚙️ Установка
+## ⚙️ Dev-development
 
 1. Клонируйте репозиторий:
    ```bash
@@ -44,3 +44,12 @@ Frontend-часть - SPA приложение, написанное на React 
    ```bash
     cd frontend/frontend-project
    npm run dev
+
+## ⚙️ Контейнеризация
+1. Убедитесь, что у вас установлен Docker и Docker Compose.
+2. Запустите контейнер из корневой папки:
+   ```bash
+   docker-compose build
+   docker-compose up
+   ```
+3. Перейдите в браузере по адресу `http://127.0.0.1:8000/` для доступа к backend и `http://localhost:3000/` для доступа к frontend.
