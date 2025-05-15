@@ -7,26 +7,12 @@ import Slider from "../../../UI/Slider";
 import Select from 'react-select';
 import {motion} from "framer-motion";
 import ItemDescriptionContainer from "../../../UI/ItemDescriptionContainer";
+import {Item} from "../../../types.ts";
 
-interface Photo {
-    id: number;
-    photo_url: string;
-}
-
-interface ItemProps {
-    title: string;
-    slug: string;
-    category: string;
-    description: string;
-    price: number;
-    available: boolean;
-    preorder: boolean;
-    photos?: Photo[];
-}
 
 export default function ItemPage() {
     const {itemSlug} = useParams();
-    const [item, setItem] = useState<ItemProps | null>(null);
+    const [item, setItem] = useState<Item | null>(null);
     const [size, setSize] = useState<string>("");
 
 
@@ -36,7 +22,7 @@ export default function ItemPage() {
         return data;
     }
 
-    const {data, isLoading, isError} = useQuery<ItemProps>({
+    const {data, isLoading, isError} = useQuery<Item>({
         queryKey: ['item', itemSlug],
         queryFn: fetchItem,
     });
@@ -72,7 +58,7 @@ export default function ItemPage() {
                     </div>
                     <div className={styles.InfoContainer}>
                         <h1 className={styles.Title}>{data.title}</h1>
-                        <p className={styles.PriceContainer}>{data.price}</p>
+                        <p className={styles.Price}>{data.price}</p>
                         <Select
                             className={styles.Select}
                             classNamePrefix={"select"}

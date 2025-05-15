@@ -4,12 +4,8 @@ import {useQuery} from "@tanstack/react-query";
 import styles from "./CategoriesBar.module.css"
 import CategoryCard from "./CategoryCard";
 import AddCategoryButton from "../../../UI/AddCategoryButton";
+import {Category} from "../../../types.ts";
 
-interface Category {
-    id: number;
-    category: string;
-    category_name: string;
-}
 
 export default function CategoriesBar() {
 
@@ -39,8 +35,8 @@ export default function CategoriesBar() {
                 ))}
             </div>
             <div className={styles.Buttons}>
-                <AddProductButton />
-                <AddCategoryButton />
+                <AddProductButton/>
+                <AddCategoryButton/>
             </div>
         </div>
     )

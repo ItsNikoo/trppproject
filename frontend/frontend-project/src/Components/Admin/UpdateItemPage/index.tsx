@@ -1,11 +1,9 @@
-"use client"
-
 import type React from "react"
 
-import { useParams, useNavigate } from "react-router"
+import {useParams, useNavigate} from "react-router"
 import axios from "axios"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { useState, useEffect } from "react"
+import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query"
+import {useState, useEffect} from "react"
 import RedirectToAdminPanelButton from "../../../UI/RedirectToAdminPanelButton"
 import {
     Autocomplete,
@@ -44,7 +42,7 @@ interface Category {
 }
 
 export default function UpdateItemPage() {
-    const { id } = useParams()
+    const {id} = useParams()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
     const [newItem, setNewItem] = useState<Item | null>(null)
@@ -63,7 +61,7 @@ export default function UpdateItemPage() {
         }
     }
 
-    const { data, isLoading, isError } = useQuery<Item>({
+    const {data, isLoading, isError} = useQuery<Item>({
         queryKey: ["item", id],
         queryFn: () => fetchItem(Number(id)),
         enabled: !!id,
@@ -76,7 +74,7 @@ export default function UpdateItemPage() {
             return response.data
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["item", id] })
+            queryClient.invalidateQueries({queryKey: ["item", id]})
             setSuccess(true)
             setTimeout(() => setSuccess(false), 3000)
         },
@@ -101,7 +99,7 @@ export default function UpdateItemPage() {
     }, [])
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const { name, value, type, checked } = e.target
+        const {name, value, type, checked} = e.target
         if (newItem) {
             setNewItem((prevState) => ({
                 ...prevState!,
@@ -149,7 +147,7 @@ export default function UpdateItemPage() {
         return (
             <div className={styles.ContainerForm}>
                 <div className={styles.MainContainer}>
-                    <CircularProgress />
+                    <CircularProgress/>
                     <p>Загрузка данных...</p>
                 </div>
             </div>
@@ -161,7 +159,7 @@ export default function UpdateItemPage() {
             <div className={styles.ContainerForm}>
                 <div className={styles.MainContainer}>
                     <Alert severity="error">Ошибка загрузки данных товара</Alert>
-                    <Button variant="contained" onClick={() => navigate(-1)} style={{ marginTop: "20px" }}>
+                    <Button variant="contained" onClick={() => navigate(-1)} style={{marginTop: "20px"}}>
                         Вернуться назад
                     </Button>
                 </div>
@@ -171,115 +169,114 @@ export default function UpdateItemPage() {
 
     return (
         <div className={styles.ContainerForm}>
-            <div className={styles.MainContainer}>
-                <h1>Страница товара {id}</h1>
-                <RedirectToAdminPanelButton />
+            <h1>Страница товара {id}</h1>
+            <RedirectToAdminPanelButton/>
 
-                {success && (
-                    <Alert severity="success" style={{ marginBottom: "20px" }}>
-                        Товар успешно обновлен!
-                    </Alert>
-                )}
+            {success && (
+                <Alert severity="success" style={{marginBottom: "20px"}}>
+                    Товар успешно обновлен!
+                </Alert>
+            )}
 
-                {error && (
-                    <Alert severity="error" style={{ marginBottom: "20px" }}>
-                        {error}
-                    </Alert>
-                )}
+            {error && (
+                <Alert severity="error" style={{marginBottom: "20px"}}>
+                    {error}
+                </Alert>
+            )}
 
-                {newItem && (
-                    <form onSubmit={handleSubmit} className={styles.Form}>
-                        <TextField
-                            name="title"
-                            label="Название"
-                            value={newItem.title}
-                            onChange={handleChange}
-                            fullWidth
+            {newItem && (
+                <form onSubmit={handleSubmit} className={styles.Form}>
+                    <TextField
+                        name="title"
+                        label="Название"
+                        value={newItem.title}
+                        onChange={handleChange}
+                        fullWidth
+                    />
+                    <TextField
+                        name="slug"
+                        label="Slug"
+                        value={newItem.slug}
+                        onChange={handleChange}
+                        fullWidth
+                    />
+                    <Autocomplete
+                        options={categories}
+                        getOptionLabel={(option) => option.category_name}
+                        value={selectedCategory}
+                        onChange={handleCategoryChange}
+                        renderInput={(params) => <TextField {...params} label="Категория"
+                                                            className={styles.Input}/>}
+                        fullWidth
+                    />
+                    <TextField
+                        name="price"
+                        label="Цена"
+                        type="number"
+                        value={newItem.price}
+                        onChange={handleChange}
+                        fullWidth
+                    />
+                    <TextField
+                        name="description"
+                        label="Описание"
+                        type="text"
+                        value={newItem.description}
+                        onChange={handleChange}
+                        fullWidth
+                        multiline
+                        rows={4}
+                    />
+                    <FormGroup>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={newItem.available}
+                                    onChange={(e) => setNewItem({...newItem, available: e.target.checked})}
+                                    name="available"
+                                />
+                            }
+                            label="Доступно"
                         />
-                        <TextField
-                            name="slug"
-                            label="Slug"
-                            value={newItem.slug}
-                            onChange={handleChange}
-                            fullWidth
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={newItem.preorder}
+                                    onChange={(e) => setNewItem({...newItem, preorder: e.target.checked})}
+                                    name="preorder"
+                                />
+                            }
+                            label="Предзаказ"
                         />
-                        <Autocomplete
-                            options={categories}
-                            getOptionLabel={(option) => option.category_name}
-                            value={selectedCategory}
-                            onChange={handleCategoryChange}
-                            renderInput={(params) => <TextField {...params} label="Категория" className={styles.Input} />}
-                            fullWidth
+                    </FormGroup>
+                    <TextField
+                        name="amount"
+                        label="Количество"
+                        type="number"
+                        value={newItem.amount}
+                        onChange={handleChange}
+                        fullWidth
+                    />
+                    <div>
+                        <UploadFilesArea
+                            folder={newItem.slug}
+                            id={id}
+                            onUploadSuccess={(uploadedPhotos) => {
+                                setNewItem((prev) => (prev ? {...prev, photos: uploadedPhotos} : null))
+                            }}
                         />
-                        <TextField
-                            name="price"
-                            label="Цена"
-                            type="number"
-                            value={newItem.price}
-                            onChange={handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            name="description"
-                            label="Описание"
-                            type="text"
-                            value={newItem.description}
-                            onChange={handleChange}
-                            fullWidth
-                            multiline
-                            rows={4}
-                        />
-                        <FormGroup>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={newItem.available}
-                                        onChange={(e) => setNewItem({ ...newItem, available: e.target.checked })}
-                                        name="available"
-                                    />
-                                }
-                                label="Доступно"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={newItem.preorder}
-                                        onChange={(e) => setNewItem({ ...newItem, preorder: e.target.checked })}
-                                        name="preorder"
-                                    />
-                                }
-                                label="Предзаказ"
-                            />
-                        </FormGroup>
-                        <TextField
-                            name="amount"
-                            label="Количество"
-                            type="number"
-                            value={newItem.amount}
-                            onChange={handleChange}
-                            fullWidth
-                        />
-                        <div>
-                            <UploadFilesArea
-                                folder={newItem.slug}
-                                id={id}
-                                onUploadSuccess={(uploadedPhotos) => {
-                                    setNewItem((prev) => (prev ? { ...prev, photos: uploadedPhotos } : null))
-                                }}
-                            />
-                        </div>
-                        <Button
-                            className={styles.Button}
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            disabled={updateMutation.isPending}
-                        >
-                            {updateMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
-                        </Button>
-                    </form>
-                )}
-            </div>
+                    </div>
+                    <Button
+                        className={styles.Button}
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={updateMutation.isPending}
+                    >
+                        {updateMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
+                    </Button>
+                </form>
+            )}
         </div>
     )
 }

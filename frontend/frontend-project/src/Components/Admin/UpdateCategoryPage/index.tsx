@@ -1,10 +1,10 @@
 import type React from "react"
 
-import { useParams, useNavigate } from "react-router"
+import {useParams, useNavigate} from "react-router"
 import axios from "axios"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
-import { TextField, Button, CircularProgress, Alert } from "@mui/material"
+import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query"
+import {useEffect, useState} from "react"
+import {TextField, Button, CircularProgress, Alert} from "@mui/material"
 import RedirectToAdminPanelButton from "../../../UI/RedirectToAdminPanelButton";
 import styles from "./UpdateCategoryPage.module.css"
 
@@ -15,14 +15,13 @@ interface Category {
 }
 
 export default function UpdateCategoryPage() {
-    const { id } = useParams()
+    const {id} = useParams()
     const navigate = useNavigate()
     const [category, setCategory] = useState<Category | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState<boolean>(false)
     const queryClient = useQueryClient()
 
-    // Функция для получения категории
     async function fetchCategory(id: number) {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/categories/${id}/`)
@@ -34,7 +33,7 @@ export default function UpdateCategoryPage() {
     }
 
     // Запрос на получение данных
-    const { data, isLoading, isError } = useQuery({
+    const {data, isLoading, isError} = useQuery({
         queryKey: ["category", id],
         queryFn: () => fetchCategory(Number(id)),
         enabled: !!id,
@@ -47,7 +46,7 @@ export default function UpdateCategoryPage() {
             return response.data
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["category", id] })
+            queryClient.invalidateQueries({queryKey: ["category", id]})
             setSuccess(true)
             setTimeout(() => setSuccess(false), 3000)
         },
@@ -66,7 +65,7 @@ export default function UpdateCategoryPage() {
 
     // Обработчик изменения полей формы
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const { name, value } = event.target
+        const {name, value} = event.target
         if (category) {
             setCategory((prevState) => ({
                 ...prevState!,
@@ -86,10 +85,8 @@ export default function UpdateCategoryPage() {
     if (isLoading) {
         return (
             <div className={styles.ContainerForm}>
-                <div className={styles.MainContainer}>
-                    <CircularProgress />
-                    <p>Загрузка данных...</p>
-                </div>
+                <CircularProgress/>
+                <p>Загрузка данных...</p>
             </div>
         )
     }
@@ -97,64 +94,60 @@ export default function UpdateCategoryPage() {
     if (isError) {
         return (
             <div className={styles.ContainerForm}>
-                <div className={styles.MainContainer}>
-                    <Alert severity="error">Ошибка при загрузке категории</Alert>
-                    <Button variant="contained" onClick={() => navigate(-1)}>
-                        Вернуться назад
-                    </Button>
-                </div>
+                <Alert severity="error">Ошибка при загрузке категории</Alert>
+                <Button variant="contained" onClick={() => navigate(-1)}>
+                    Вернуться назад
+                </Button>
             </div>
         )
     }
 
     return (
         <div className={styles.ContainerForm}>
-            <div className={styles.MainContainer}>
-                <RedirectToAdminPanelButton />
-                <h1>Редактирование категории {id}</h1>
+            <RedirectToAdminPanelButton/>
+            <h1>Редактирование категории {id}</h1>
 
-                {success && (
-                    <Alert severity="success" style={{ marginBottom: "20px" }}>
-                        Категория успешно обновлена!
-                    </Alert>
-                )}
+            {success && (
+                <Alert severity="success" style={{marginBottom: "20px"}}>
+                    Категория успешно обновлена!
+                </Alert>
+            )}
 
-                {error && (
-                    <Alert severity="error" style={{ marginBottom: "20px" }}>
-                        {error}
-                    </Alert>
-                )}
+            {error && (
+                <Alert severity="error" style={{marginBottom: "20px"}}>
+                    {error}
+                </Alert>
+            )}
 
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        name="category"
-                        label="Название категории"
-                        value={category?.category || ""}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
+            <form onSubmit={handleSubmit}>
+                <TextField
+                    name="category"
+                    label="Название категории"
+                    value={category?.category || ""}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                />
 
-                    <TextField
-                        name="category_name"
-                        label="Отображаемое имя категории"
-                        value={category?.category_name || ""}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
+                <TextField
+                    name="category_name"
+                    label="Отображаемое имя категории"
+                    value={category?.category_name || ""}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                />
 
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        disabled={updateMutation.isPending}
-                        style={{ marginTop: "20px" }}
-                    >
-                        {updateMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
-                    </Button>
-                </form>
-            </div>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    disabled={updateMutation.isPending}
+                    style={{marginTop: "20px"}}
+                >
+                    {updateMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
+                </Button>
+            </form>
         </div>
     )
 }

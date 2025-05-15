@@ -3,24 +3,8 @@ import CardsContainer from "../../CardsContainer";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import styles from "./GlobalPage.module.css"
+import {Item} from "../../../types.ts";
 
-interface Photo {
-    id: number;
-    photo_url: string;
-}
-
-interface Item {
-    id: number;
-    title: string;
-    price: number;
-    slug: string;
-    is_featured: boolean;
-    description: string;
-    category: string;
-    available: boolean;
-    preorder: boolean;
-    photos: Photo[];
-}
 
 export default function GlobalPage() {
     async function fetchData() {

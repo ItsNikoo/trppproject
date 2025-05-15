@@ -113,88 +113,89 @@ export default function AddItemPage() {
 
     return (
         <div className={styles.ContainerForm}>
-            <div className={styles.MainContainer}>
-                <RedirectToAdminPanelButton/>
-                <form onSubmit={createItem} className={styles.Form}>
-                    <TextField
-                        label="Название"
-                        value={newItem.title}
-                        onChange={(e) => setNewItem({...newItem, title: e.target.value})}
-                        fullWidth
+            <RedirectToAdminPanelButton/>
+            <h1>Добавить товар</h1>
+            <form onSubmit={createItem} className={styles.Form}>
+                <TextField
+                    label="Название"
+                    value={newItem.title}
+                    onChange={(e) => setNewItem({...newItem, title: e.target.value})}
+                    fullWidth
+                />
+                <TextField
+                    label="Slug"
+                    value={newItem.slug}
+                    onChange={(e) => setNewItem({...newItem, slug: e.target.value})}
+                    fullWidth
+                />
+                <Autocomplete
+                    options={categories}
+                    getOptionLabel={(option) => option.category_name}
+                    onChange={(_, value) => setNewItem({...newItem, category: value?.category || ""})}
+                    renderInput={(params) => (
+                        <TextField {...params} label="Категория" className={styles.Input}/>
+                    )}
+                    fullWidth
+                />
+                <TextField
+                    label="Описание"
+                    value={newItem.description}
+                    onChange={(e) => setNewItem({...newItem, description: e.target.value})}
+                    multiline
+                    rows={4}
+                    fullWidth
+                />
+                <TextField
+                    type="number"
+                    label="Цена"
+                    value={newItem.price}
+                    onChange={(e) => setNewItem({...newItem, price: Number(e.target.value)})}
+                    fullWidth
+                />
+                <FormGroup>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={newItem.available}
+                                onChange={(e) => setNewItem({...newItem, available: e.target.checked})}
+                            />
+                        }
+                        label="Доступно"
                     />
-                    <TextField
-                        label="Slug"
-                        value={newItem.slug}
-                        onChange={(e) => setNewItem({...newItem, slug: e.target.value})}
-                        fullWidth
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={newItem.preorder}
+                                onChange={(e) => setNewItem({...newItem, preorder: e.target.checked})}
+                            />
+                        }
+                        label="Предзаказ"
                     />
-                    <Autocomplete
-                        options={categories}
-                        getOptionLabel={(option) => option.category_name}
-                        onChange={(_, value) => setNewItem({...newItem, category: value?.category || ""})}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Категория" className={styles.Input}/>
-                        )}
-                        fullWidth
-                    />
-                    <TextField
-                        label="Описание"
-                        value={newItem.description}
-                        onChange={(e) => setNewItem({...newItem, description: e.target.value})}
-                        fullWidth
-                    />
-                    <TextField
-                        type="number"
-                        label="Цена"
-                        value={newItem.price}
-                        onChange={(e) => setNewItem({...newItem, price: Number(e.target.value)})}
-                        fullWidth
-                    />
-                    <FormGroup>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={newItem.available}
-                                    onChange={(e) => setNewItem({...newItem, available: e.target.checked})}
-                                />
-                            }
-                            label="Доступно"
-                        />
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={newItem.preorder}
-                                    onChange={(e) => setNewItem({...newItem, preorder: e.target.checked})}
-                                />
-                            }
-                            label="Предзаказ"
-                        />
-                    </FormGroup>
-                    <TextField
-                        type="number"
-                        label="Количество"
-                        value={newItem.amount}
-                        onChange={(e) => setNewItem({...newItem, amount: Number(e.target.value)})}
-                        fullWidth
-                    />
-                    <UploadFilesArea
-                        folder={newItem.slug}
-                        onUploadSuccess={(photos) => {
-                            setNewItem((prev) => ({
-                                ...prev,
-                                photos: photos,
-                            }));
-                        }}
-                        />
-                        {error && <div className={styles.Error}>{error}
-            </div>
-            }
-            <button className={styles.Button} type="submit">
-                Добавить продукт
-            </button>
-        </form>
-</div>
-</div>
-)
-    ;
+                </FormGroup>
+                <TextField
+                    type="number"
+                    label="Количество"
+                    value={newItem.amount}
+                    onChange={(e) => setNewItem({...newItem, amount: Number(e.target.value)})}
+                    fullWidth
+                />
+                <UploadFilesArea
+                    folder={newItem.slug}
+                    onUploadSuccess={(photos) => {
+                        setNewItem((prev) => ({
+                            ...prev,
+                            photos: photos,
+                        }));
+                    }}
+                />
+                {error && <div className={styles.Error}>{error}
+                </div>
+                }
+                <button className={styles.Button} type="submit">
+                    Добавить продукт
+                </button>
+            </form>
+        </div>
+    )
+        ;
 }

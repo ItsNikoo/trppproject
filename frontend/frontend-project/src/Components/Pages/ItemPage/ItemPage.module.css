@@ -10,16 +10,17 @@ h1 {
 
 .PhotoContainer {
     width: 50%;
-    height: 90vh; /* Занимает всю высоту экрана */
+    height: 90vh;
     position: sticky;
-    top: 0; /* Фиксируется в верхней части */
+    top: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background: #fff; /* Фон на случай, если контент будет просвечивать */
+    background: #fff;
     z-index: 10;
 }
+
 .InfoContainer {
     width: 50%;
     display: flex;
@@ -28,13 +29,17 @@ h1 {
     gap: 10px;
 }
 
-.PriceContainer {
-    font-size: 18px;
+.Price {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 8px 0;
+    color: #000;
 }
 
 .Title {
-    font-size: 30px;
-    font-weight: 700;
+    font-size: 34px;
+    font-weight: 500;
+    color: #131313;
 }
 
 .Button {

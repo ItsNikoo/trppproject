@@ -3,6 +3,7 @@ import uuid
 import boto3
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,6 +15,20 @@ from decouple import config
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    lookup_field = "category"
+
+    @action(detail=True, methods=['get'], url_path='items', url_name='category_items')
+    def get_items(self, request, category=None):
+        try:
+            category = self.get_object()
+            items = category.items.all()
+            serializer = ItemSerializer(items, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Category.DoesNotExist:
+            return Response(
+                {"error": "Категория не найдена"},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class ItemViewSet(viewsets.ModelViewSet):
@@ -56,17 +71,20 @@ class PhotoUploadView(APIView):
 
         return Response({'photo_url': photo.photo_url}, status=status.HTTP_201_CREATED)
 
+
 class GetItemBySlug(APIView):
     def get(self, request, slug):
         item = get_object_or_404(Item, slug=slug)
         serializer = ItemSerializer(item)
         return Response(serializer.data)
 
+
 class FeaturedItemsView(APIView):
     def get(self, request):
         featured_items = Item.objects.filter(is_featured=True)
         serializer = ItemSerializer(featured_items, many=True)
         return Response(serializer.data)
+
 
 class UploadMultiplePhotosView(APIView):
     parser_classes = (MultiPartParser, FormParser)

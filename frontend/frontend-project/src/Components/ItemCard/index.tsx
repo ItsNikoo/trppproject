@@ -1,29 +1,10 @@
 import styles from "./ItemCard.module.css"
 import {Link} from "react-router";
 import {useState} from "react";
+import {GlobalItem} from "../../types.ts";
 
-interface Photo {
-    id: number;
-    photo_url: string;
-}
 
-interface ItemProps {
-    id: number;
-    title: string;
-    slug: string;
-    is_featured: boolean;
-    category: string;
-    price: number;
-    available: boolean;
-    preorder: boolean;
-    photos?: Photo[];
-}
-
-interface ItemCardProps{
-    item: ItemProps
-}
-
-export default function ItemCard({item}: ItemCardProps) {
+export default function ItemCard({item}: GlobalItem) {
     const [hovered, setHovered] = useState(false);
 
     return (

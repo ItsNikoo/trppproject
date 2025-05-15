@@ -72,26 +72,24 @@ export default function AddCategoryPage() {
 
     return (
         <div className={styles.ContainerForm}>
-            <div className={styles.MainContainer}>
-                <RedirectToAdminPanelButton/>
-                <h1>Добавить категорию</h1>
-                <form onSubmit={createCategory} className={styles.Form}>
-                    <TextField
-                        label="Идентификатор категории"
-                        value={category.category}
-                        onChange={(e) => setCategory({...category, category: e.target.value})}
-                        fullWidth
-                    />
-                    <TextField
-                        label="Категория"
-                        value={category.category_name}
-                        onChange={(e) => setCategory({...category, category_name: e.target.value})}
-                        fullWidth
-                    />
-                    <button className={styles.Button} type='submit'>Добавить категорию</button>
-                </form>
-                <p className={styles.Error}>{error}</p>
-            </div>
+            <RedirectToAdminPanelButton/>
+            <h1>Добавить категорию</h1>
+            <form onSubmit={createCategory} className={styles.Form}>
+                <TextField
+                    label="Идентификатор категории"
+                    value={category.category}
+                    onChange={(e) => setCategory({...category, category: e.target.value})}
+                    fullWidth
+                />
+                <TextField
+                    label="Категория"
+                    value={category.category_name}
+                    onChange={(e) => setCategory({...category, category_name: e.target.value})}
+                    fullWidth
+                />
+                <button className={styles.Button} type='submit'>Добавить категорию</button>
+            </form>
+            <p className={styles.Error}>{error}</p>
         </div>
     )
 }
