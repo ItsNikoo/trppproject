@@ -124,3 +124,46 @@ h1 {
     color: #8a8a8a;
     cursor: not-allowed;
 }
+
+.ChangeSize {
+    color: red;
+    margin: 0;
+    padding: 0;
+}
+
+.ModalImage {
+    width: 400px;
+    height: 400px;
+}
+
+.CartContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.ItemInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.QuantityInput {
+    font-size: 16px;
+    width: fit-content;
+}
+
+.PriceInCart {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.CartMessage {
+    font-size: 14px;
+    color: #28a745;
+    margin-top: 10px;
+}
+
+.CartMessage.error {
+    color: red;
+}

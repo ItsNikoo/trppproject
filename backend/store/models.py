@@ -28,4 +28,10 @@ class Item(models.Model):
     available = models.BooleanField(default=False)
     preorder = models.BooleanField(default=True)
     amount = models.IntegerField()
-    photos = models.ManyToManyField("Photo",related_name='items')
+    photos = models.ManyToManyField("Photo", related_name='items')
+
+
+class CartItem(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="cart_item")
+    size = models.CharField()
+    quantity = models.IntegerField()

@@ -7,8 +7,8 @@ from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from store.models import Category, Item, Photo
-from store.serializers import CategorySerializer, ItemSerializer, PhotoSerializer
+from store.models import Category, Item, Photo, CartItem
+from store.serializers import CategorySerializer, ItemSerializer, PhotoSerializer, CartItemSerializer
 from decouple import config
 
 
@@ -125,3 +125,7 @@ class UploadMultiplePhotosView(APIView):
         serialized_photos = PhotoSerializer(photo_objects, many=True)
 
         return Response({'photos': serialized_photos.data}, status=status.HTTP_201_CREATED)
+
+class CartViewSet(viewsets.ModelViewSet):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer

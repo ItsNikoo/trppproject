@@ -26,3 +26,9 @@ export interface Category {
     category: string;
     category_name: string;
 }
+
+export interface CartItem {
+    item: number;
+    size: string;
+    quantity: number;
+}

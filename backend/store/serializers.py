@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Item, Photo
+from .models import Category, Item, Photo, CartItem
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -12,6 +12,12 @@ class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = ['id', 'photo_url']
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = ["id", 'item', "size", 'quantity']
 
 
 class ItemSerializer(serializers.ModelSerializer):

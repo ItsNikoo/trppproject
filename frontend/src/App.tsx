@@ -3,7 +3,7 @@ import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import {Route, Routes, useLocation} from "react-router";
 import GlobalPage from "./Components/Pages/GlobalPage";
-import AboutUsPage from "./Components/AboutUsPage";
+import AboutUsPage from "./Components/Pages/AboutUsPage";
 import AdminPanel from "./Components/Admin/AdminPanel";
 import AddItemPage from "./Components/Admin/AddItemPage";
 import UpdateItemPage from "./Components/Admin/UpdateItemPage";
