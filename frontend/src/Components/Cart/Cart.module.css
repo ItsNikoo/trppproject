@@ -1,0 +1,98 @@
+.Cart {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.Image {
+    width: 100%;
+    height: 100%;
+}
+
+.Container {
+    display: flex;
+    flex-direction: column;
+}
+
+.CartItem {
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    gap: 16px;
+}
+
+.ItemInfo {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+}
+
+.ImageContainer {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ImageInCart {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.ItemDetails {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ItemTitle {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.PriceRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.Price {
+    font-weight: 600;
+}
+
+.Multiply {
+    opacity: 0.6;
+}
+
+.TotalPrice {
+    margin-left: auto;
+    font-weight: 600;
+    color: #333;
+}
+
+.Size {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.Button {
+    background-color: black;
+    color: white;
+    border: none;
+    width: fit-content;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}

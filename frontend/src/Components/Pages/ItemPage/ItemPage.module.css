@@ -131,15 +131,11 @@ h1 {
     padding: 0;
 }
 
-.ModalImage {
-    width: 400px;
-    height: 400px;
-}
-
 .CartContent {
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 25px;
 }
 
 .ItemInfo {
@@ -166,4 +162,16 @@ h1 {
 
 .CartMessage.error {
     color: red;
+}
+
+.ImageContainer {
+    width: 400px;
+    height: auto;
+    overflow: hidden; /* если нужно обрезать лишнее */
+}
+
+.ModalImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }

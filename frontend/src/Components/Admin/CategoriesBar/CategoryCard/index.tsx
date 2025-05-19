@@ -16,13 +16,13 @@ export default function CategoryCard({category}: { category: Category }) {
     const navigate = useNavigate();
 
     async function deleteCategory() {
-        await axios.delete(`http://127.0.0.1:8000/api/categories/${category.id}/`)
-        console.log(`Категория ${category.id} удалена`);
+        await axios.delete(`http://127.0.0.1:8000/api/categories/${category.category}/`)
+        console.log(`Категория ${category.category_name} удалена`);
         queryClient.invalidateQueries({queryKey: ['categories']});
     }
 
     function redirect(){
-        navigate(`/admin/update_category/${category.id}`)
+        navigate(`/admin/update_category/${category.category}`)
     }
 
     return (

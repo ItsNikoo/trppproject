@@ -44,7 +44,7 @@ function App() {
                     <Route path={'/admin'} element={<AdminPanel/>}/>
                     <Route path={'/admin/add'} element={<AddItemPage/>}/>
                     <Route path={"admin/add_category"} element={<AddCategoryPage/>}/>
-                    <Route path={"/admin/update_category/:id"} element={<UpdateCategoryPage/>}/>
+                    <Route path={"/admin/update_category/:category"} element={<UpdateCategoryPage/>}/>
                     <Route path={'/admin/update/:id'} element={<UpdateItemPage/>}/>
                     <Route index element={<GlobalPage/>}/>
                     <Route path={"/catalog"} element={<CatalogPage/>}/>

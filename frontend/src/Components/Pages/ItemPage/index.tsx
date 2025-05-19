@@ -1,10 +1,10 @@
 import { useParams } from "react-router";
 import { useState } from "react";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./ItemPage.module.css";
 import Slider from "../../../UI/Slider";
-import Select from 'react-select';
+import Select from "react-select";
 import { motion } from "framer-motion";
 import ItemDescriptionContainer from "../../../UI/ItemDescriptionContainer";
 import { Item } from "../../../types.ts";
@@ -17,56 +17,63 @@ export default function ItemPage() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [quantity, setQuantity] = useState<number>(1);
     const [cartMessage, setCartMessage] = useState<string | null>(null);
+    const queryClient = useQueryClient(); // Добавляем queryClient для управления кэшем
 
+    // Запрос данных о товаре
     async function fetchItem() {
         const { data } = await axios.get(`http://127.0.0.1:8000/api/items/slug/${itemSlug}/`);
         return data;
     }
 
-    async function postItem() {
-        if (!data || !data.id || !size) {
-            setCartMessage("Ошибка: данные о товаре или размере отсутствуют");
-            return;
-        }
+    const { data, isLoading, isError } = useQuery<Item>({
+        queryKey: ["item", itemSlug],
+        queryFn: fetchItem,
+    });
 
-        try {
-            const response = await axios.post(`http://127.0.0.1:8000/api/cart/`, {
+    // Мутация для добавления товара в корзину
+    const addToCartMutation = useMutation({
+        mutationFn: async () => {
+            if (!data?.id || !size) {
+                throw new Error("Данные о товаре или размере отсутствуют");
+            }
+            return await axios.post(`http://127.0.0.1:8000/api/cart/`, {
                 item: data.id,
                 size: size,
                 quantity: quantity,
             });
-            console.log(response.data);
+        },
+        onSuccess: () => {
             setCartMessage("Товар успешно добавлен в корзину!");
+            // Инвалидируем кэш корзины и товаров
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
+            queryClient.invalidateQueries({ queryKey: ["cart-items"] });
             setTimeout(() => {
                 setIsOpen(false);
                 setCartMessage(null);
                 setQuantity(1);
                 setSize(null);
-            }, 1500); // Закрыть модал через 1.5 секунды
-        } catch (error) {
+            }, 1500); // Закрываем модал через 1.5 секунды
+        },
+        onError: (error) => {
             setCartMessage("Ошибка при добавлении в корзину");
             console.error("Ошибка POST-запроса:", error);
-        }
-    }
-
-    const { data, isLoading, isError } = useQuery<Item>({
-        queryKey: ['item', itemSlug],
-        queryFn: fetchItem,
+        },
     });
 
     function checkSize() {
-        setErrorSize(true);
-        if (size !== null) {
-            setIsOpen(true);
-            setErrorSize(false);
+        if (!size) {
+            setErrorSize(true);
+            return;
         }
+        setErrorSize(false);
+        setIsOpen(true);
     }
 
     const options = [
-        { value: 'S', label: 'S' },
-        { value: 'M', label: 'M' },
-        { value: 'L', label: 'L' },
-        { value: 'XL', label: 'XL' },
+        { value: "S", label: "S" },
+        { value: "M", label: "M" },
+        { value: "L", label: "L" },
+        { value: "XL", label: "XL" },
     ];
 
     return (
@@ -77,43 +84,48 @@ export default function ItemPage() {
             transition={{ duration: 0.5 }}
             className={styles.Container}
         >
-            {isLoading && <div>Загрузка...</div>}
-            {isError && <div>Ошибка загрузки данных</div>}
-            {data && data.title !== undefined && data.price !== undefined && data.description !== undefined && (
+            {isLoading && <div className={styles.Loading}>Загрузка...</div>}
+            {isError && <div className={styles.Error}>Ошибка загрузки данных</div>}
+            {data && data.title && data.price && data.description && (
                 <div className={styles.MainContainer}>
                     <div className={styles.PhotoContainer}>
-                        {data.photos && data.photos.length > 0 && <Slider photos={data.photos} />}
+                        {data.photos && data.photos.length > 0 ? (
+                            <Slider photos={data.photos} />
+                        ) : (
+                            <div className={styles.NoImage}>Изображение отсутствует</div>
+                        )}
                     </div>
                     <div className={styles.InfoContainer}>
                         <h1 className={styles.Title}>{data.title}</h1>
-                        <p className={styles.Price}>{data.price}</p>
+                        <p className={styles.Price}>{data.price} ₽</p>
                         <Select
                             className={styles.Select}
-                            classNamePrefix={"select"}
+                            classNamePrefix="select"
                             options={options}
                             placeholder="Выберите размер"
                             isSearchable
-                            onChange={(selected) => {
-                                const newSize = selected?.value || "";
-                                setSize(newSize);
-                                console.log(newSize);
-                            }}
+                            onChange={(selected) => setSize(selected?.value || null)}
+                            value={options.find((option) => option.value === size) || null}
                         />
                         <button
-                            className={`${styles.Button} ${data.available !== undefined && data.available ? styles.ButtonAvailable : styles.ButtonUnavailable}`}
+                            className={`${styles.Button} ${
+                                data.available ? styles.ButtonAvailable : styles.ButtonUnavailable
+                            }`}
                             onClick={checkSize}
-                            disabled={data.available === undefined || !data.available}
+                            disabled={!data.available || addToCartMutation.isPending}
                         >
-                            В корзину
+                            {addToCartMutation.isPending ? "Добавление..." : "В корзину"}
                         </button>
-                        {errorSize && <p className={styles.ChangeSize}>Пожалуйста выберите размер</p>}
+                        {errorSize && (
+                            <p className={styles.ChangeSize}>Пожалуйста, выберите размер</p>
+                        )}
                         <ModalWindow onClose={() => setIsOpen(false)} isOpen={isOpen}>
                             <div className={styles.CartContent}>
-                                <div>
+                                <div className={styles.ImageContainer}>
                                     {data.photos && data.photos.length > 0 && (
                                         <img
                                             src={data.photos[0].photo_url}
-                                            alt={data.title || "Изображение товара"}
+                                            alt={data.title}
                                             className={styles.ModalImage}
                                         />
                                     )}
@@ -121,12 +133,14 @@ export default function ItemPage() {
                                 <div className={styles.ItemInfo}>
                                     <h1>{data.title}</h1>
                                     <p>Выбранный размер: {size}</p>
-                                    <div>
-                                        <button onClick={() => {
-                                            if (quantity - 1 >= 1) {
-                                                setQuantity(quantity - 1);
-                                            }
-                                        }}>-
+                                    <div className={styles.QuantityControl}>
+                                        <button
+                                            onClick={() => {
+                                                if (quantity > 1) setQuantity(quantity - 1);
+                                            }}
+                                            disabled={quantity <= 1}
+                                        >
+                                            -
                                         </button>
                                         <input
                                             className={styles.QuantityInput}
@@ -139,23 +153,31 @@ export default function ItemPage() {
                                                 }
                                             }}
                                         />
-                                        <button onClick={() => {
-                                            setQuantity(quantity + 1);
-                                        }}>+
-                                        </button>
+                                        <button onClick={() => setQuantity(quantity + 1)}>+</button>
                                     </div>
-                                    <p className={styles.PriceInCart}>{data.price * quantity} р.</p>
+                                    <p className={styles.PriceInCart}>{data.price * quantity} ₽</p>
                                     <button
                                         className={styles.Button}
-                                        onClick={postItem}
+                                        onClick={() => addToCartMutation.mutate()}
+                                        disabled={addToCartMutation.isPending}
                                     >
-                                        В корзину
+                                        {addToCartMutation.isPending ? "Добавление..." : "В корзину"}
                                     </button>
-                                    {cartMessage && <p className={styles.CartMessage}>{cartMessage}</p>}
+                                    {cartMessage && (
+                                        <p
+                                            className={`${styles.CartMessage} ${
+                                                cartMessage.includes("Ошибка")
+                                                    ? styles.ErrorMessage
+                                                    : styles.SuccessMessage
+                                            }`}
+                                        >
+                                            {cartMessage}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </ModalWindow>
-                        {data.available !== undefined && !data.available && (
+                        {!data.available && (
                             <p className={styles.Available}>Нет в наличии</p>
                         )}
                         <ItemDescriptionContainer description={data.description} />
