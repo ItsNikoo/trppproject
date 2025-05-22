@@ -10,7 +10,7 @@ export default function CardsContainer({data}: { data: Item[] }) {
     }
 
     return (
-        <motion.div className={styles.MainContainer}
+        <motion.div
             initial={{y: -25, opacity: 0}}
             animate={{y: 0, opacity: 1}}
             exit={{opacity: 0}}

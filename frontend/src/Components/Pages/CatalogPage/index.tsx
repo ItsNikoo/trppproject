@@ -65,25 +65,27 @@ export default function CatalogPage() {
 
     return (
         <div className={styles.default}>
-            <input
-                onChange={handleChange}
-                className={styles.Input}
-                type="text"
-                placeholder="Поиск"
-                value={query}
-            />
-
-            <div className={styles.Settings}>
-                <Autocomplete
-                    options={categories}
-                    getOptionLabel={(option) => option.category_name}
-                    value={selectedCategory}
-                    onChange={handleCategoryChange}
-                    renderInput={(params) => (
-                        <TextField {...params} label="Выберите категорию" variant="outlined"/>
-                    )}
-                    fullWidth
+            <div className={styles.InputBar}>
+                <input
+                    onChange={handleChange}
+                    className={styles.Input}
+                    type="text"
+                    placeholder="Поиск"
+                    value={query}
                 />
+
+                <div className={styles.Settings}>
+                    <Autocomplete
+                        options={categories}
+                        getOptionLabel={(option) => option.category_name}
+                        value={selectedCategory}
+                        onChange={handleCategoryChange}
+                        renderInput={(params) => (
+                            <TextField {...params} label="Выберите категорию" variant="outlined"/>
+                        )}
+                        fullWidth
+                    />
+                </div>
             </div>
 
             <div className={styles.grid}>

@@ -1,3 +1,4 @@
+
 h1 {
     margin: 0;
     padding: 0;
@@ -5,28 +6,25 @@ h1 {
 
 .MainContainer {
     display: flex;
-    margin: 25px 0;
+    gap: 20px;
 }
 
 .PhotoContainer {
     width: 50%;
-    height: 90vh;
-    position: sticky;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background: #fff;
-    z-index: 10;
+    max-height: 80vh;
+    overflow: hidden;
+    position: relative;
 }
 
 .InfoContainer {
     width: 50%;
+    padding: 20px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
-    padding: 30px 30px 30px 0;
-    gap: 10px;
+    gap: 5px;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .Price {
@@ -174,4 +172,126 @@ h1 {
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+
+@media (max-width: 900px) {
+    .MainContainer {
+        flex-direction: column;
+        gap: 10px; /* Reduce gap for smaller screens */
+    }
+
+    .PhotoContainer {
+        width: 100%;
+    }
+
+    .InfoContainer {
+        height: 40vh;
+        width: 100%;
+        margin: 0;
+        padding: 10px; /* Slightly reduce padding for compactness */
+        box-sizing: border-box; /* Ensure padding doesn't affect width */
+    }
+
+    .Title {
+        font-size: 20px; /* Keep existing font size */
+        line-height: 1.2; /* Improve readability */
+    }
+
+    .Price {
+        font-size: 18px; /* Slightly smaller for mobile */
+        margin: 5px 0; /* Adjust margin for tighter layout */
+    }
+
+    .Select {
+        width: 100%; /* Full width for better usability on mobile */
+        max-width: 200px; /* Cap width to prevent overflow */
+    }
+
+    .Button {
+        width: 100%; /* Full-width button for easier tapping */
+        padding: 8px 15px; /* Slightly smaller padding */
+        font-size: 14px; /* Adjust font size for mobile */
+    }
+
+    .Description {
+        padding: 0 5px; /* Reduce padding for smaller screens */
+    }
+
+    .Description h1 {
+        font-size: 18px; /* Smaller header for description */
+    }
+
+    .CartContent {
+        flex-direction: column; /* Stack cart content vertically */
+        gap: 15px; /* Reduce gap for compactness */
+        align-items: flex-start; /* Align left for better flow */
+    }
+
+    .ImageContainer {
+        width: 100%; /* Full width for modal image */
+        max-width: 300px; /* Limit max width */
+        height: auto;
+    }
+
+    .QuantityControl {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Consistent spacing */
+    }
+
+    .QuantityInput {
+        font-size: 14px; /* Smaller input font size */
+        width: 60px; /* Fixed width for input */
+    }
+
+    .CartMessage {
+        font-size: 12px; /* Smaller message text */
+    }
+
+    .Available {
+        font-size: 14px; /* Adjust for readability */
+    }
+
+    .ChangeSize {
+        font-size: 14px; /* Match Available text size */
+    }
+}
+
+/* Add a media query for very small screens (e.g., mobile < 600px) */
+@media (max-width: 600px) {
+
+    .InfoContainer {
+        padding: 8px; /* Further reduce padding */
+    }
+
+    .Title {
+        font-size: 18px; /* Slightly smaller for very small screens */
+    }
+
+    .Price {
+        font-size: 16px; /* Adjust for smaller screens */
+    }
+
+    .Button {
+        font-size: 13px; /* Smaller button text */
+        padding: 7px 10px; /* Compact padding */
+    }
+
+    .Select {
+        max-width: 150px; /* Further cap select width */
+    }
+
+    .Description h1 {
+        font-size: 16px; /* Smaller description header */
+    }
+
+    .ImageContainer {
+        max-width: 250px; /* Smaller image container */
+    }
+
+    .QuantityInput {
+        width: 50px; /* Smaller input width */
+        font-size: 13px;
+    }
 }

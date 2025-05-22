@@ -5,10 +5,11 @@ import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 import {CartItem} from "../../types.ts";
 import Cart from "../Cart";
+import {useState} from "react";
 
 export default function Header() {
+    const [isMenuOpen, setMenuOpen] = useState(false);
 
-    // Запрос для получения корзины
     const {data: cartItems, error, isLoading} = useQuery<CartItem[]>({
         queryKey: ['cart'],
         queryFn: fetchCart,
@@ -24,6 +25,10 @@ export default function Header() {
         }
     }
 
+    function toggleMenu() {
+        setMenuOpen(!isMenuOpen);
+    }
+
     if (isLoading) {
         return <div>Загрузка...</div>;
     }
@@ -34,20 +39,23 @@ export default function Header() {
 
     return (
         <div className={styles.Container}>
-            <Link to="/">
+            <button onClick={toggleMenu} className={styles.MenuButton}>
+                ☰
+            </button>
+            <Link to="/" >
                 <img className={styles.Logo} src={logo} alt="Логотип"/>
             </Link>
 
-            <nav>
+            <nav className={`${styles.Nav} ${isMenuOpen && styles.NavOpen}`}>
                 <ul className={styles.List}>
-                    <li className={styles.ListItem}>
-                        <Link className={styles.Link} to="/">Главная</Link>
+                    <li>
+                        <Link className={styles.Link} to="/" onClick={toggleMenu}>Главная</Link>
                     </li>
-                    <li className={styles.ListItem}>
-                        <Link className={styles.Link} to="/catalog">Каталог</Link>
+                    <li>
+                        <Link className={styles.Link} to="/catalog" onClick={toggleMenu}>Каталог</Link>
                     </li>
-                    <li className={styles.ListItem}>
-                        <Link className={styles.Link} to="/about">О нас</Link>
+                    <li>
+                        <Link className={styles.Link} to="/about" onClick={toggleMenu}>О нас</Link>
                     </li>
                 </ul>
             </nav>

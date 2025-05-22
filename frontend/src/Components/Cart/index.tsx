@@ -65,7 +65,7 @@ export default function Cart({data}: { data: CartItem[] }) {
             <ModalWindow onClose={() => setIsOpen(false)} isOpen={isOpen}>
                 <div className={styles.Container}>
                     <h1>Корзина</h1>
-                    <div className={styles.CartItems}>
+                    <div>
                         {data && data.length > 0 ? (
                             data.map((cartItem, index) => {
                                 const item = items?.[index];

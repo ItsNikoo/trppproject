@@ -10,45 +10,69 @@
 .Logo {
     width: 200px;
     height: 50px;
-    background-color: aquamarine;
 }
 
-.List {
+.List{
     display: flex;
-    flex-direction: row;
-    gap: 20px;
     list-style: none;
-    left: 30%;
-    transform: translateX(-30%);
+    padding: 0;
+    gap: 25px;
 }
 
-.ListItem {
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-    font-size: 18px;
+.Nav {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
-.Link{
+.NavOpen {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.Link {
     text-decoration: none;
     color: black;
     font-weight: 600;
     font-size: 18px;
 }
 
-/* Адаптивность */
+.MenuButton {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .List {
-        display: none; /* Скрываем меню на мобильных (можно заменить на бургер) */
+        margin-left: 30px;
+        flex-direction: column;
+        gap: 10px;
     }
 
-    .Logo {
-        width: 150px;
+    .Logo{
+        width: 120px;
+        height: 40px;
     }
 
     .Cart {
         width: 40px;
         height: 40px;
+    }
+
+    .MenuButton {
+        display: flex;
+    }
+
+    .Nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 250px;
+        background-color: #fff;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        transform: translateX(-100%);
+        z-index: 1000;
+    }
+
+    .NavOpen {
+        transform: translateX(0);
     }
 }
